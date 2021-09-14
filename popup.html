@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <h1>Leetnotes</h1>
+    <div class="container">
+      <div class="question-details">
+        <div id="title-info"># Title</div>
+        <div id="difficulty">Difficulty</div>
+      </div>
+      <div class="date-time">
+        <input class="date" type="date" />
+        <div class="confidence">
+          <select class="confidence-dropdown">
+            <option value="understood1">understood</option>
+            <option value="understood2">understood overall gist</option>
+            <option value="understood3">important detail not understood</option>
+            <option value="understood4">overall not understood</option>
+          </select>
+        </div>
+      </div>
+      <div class="notes">
+        <p>notes</p>
+        <input type="text" class="notes-input"/>
+      </div>
+      <input id="submit-btn" type="submit" value="add to notion" />
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
