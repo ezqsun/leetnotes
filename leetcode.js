@@ -1,4 +1,4 @@
-chrome.storage.local.set({ isLoading: true });
+let problemInfo = {isLoading: true};
 
 function checkElement(e) {
   return e && e.length > 0;
@@ -33,24 +33,15 @@ function getProblemDifficulty() {
   return "";
 }
 
-function setProblemInfo() {
+function getProblemInfo() {
   setTimeout(() => {
     const title = getProblemName();
     const diff = getProblemDifficulty();
-    const problemInfo = {
+    problemInfo = {
+      isLoading: false,
       title: title,
       difficulty: diff
     }
-    console.log(problemInfo);
-
-    // chrome.storage.local.set({});
-    // chrome.storage.local.set({ isLoading: false });
-
-    chrome.runtime.sendMessage(problemInfo, (res)=>{
-      console.log('problemInfo sent');
-    });
-
-
   }, 2000);
 
 }
@@ -72,7 +63,15 @@ function getNotesIfAny() {
   return notes.trim();
 }
 
-setProblemInfo();
+getProblemInfo();
+chrome.runtime.onMessage.addListener(
+  function (request, sender, sendResponse) {
+
+    if (request === "getCurrTabInfo") {
+      sendResponse(problemInfo);
+    }
+  }
+);
 
 
 
