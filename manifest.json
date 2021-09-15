@@ -1,0 +1,21 @@
+{
+    "name": "Leetnotes",
+    "description": "Add Leetcode notes and stats to Notion",
+    "version": "1.0",
+    "manifest_version": 3,
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": [
+        "storage",
+        "activeTab",
+        "tabs"
+    ],
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [{
+        "matches": ["*://leetcode.com/problems/*"],
+        "js": ["leetcode.js"]
+      }]
+}

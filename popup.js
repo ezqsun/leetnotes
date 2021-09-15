@@ -1,41 +1,44 @@
 //implement ability to switch content with tab switches
 
-function setProbInfo() {
-        chrome.storage.local.get(["title"], (response) => {
-            document.getElementById("title-info").innerHTML = response.title;
-            console.log(response.title)
+function setProbInfo(info) {
+    ({ isLoading, title, difficulty } = info);
 
-        })
-        chrome.storage.local.get(["difficulty"], (response) => {
-            const difficultyEle = document.getElementById("difficulty");
-            document.getElementById("difficulty").innerHTML = response.difficulty;
+    document.getElementById("title-info").innerHTML = title;
+    const difficultyEle = document.getElementById("difficulty");
+    document.getElementById("difficulty").innerHTML = difficulty;
 
-            if (response.difficulty === "Easy") {
-                difficultyEle.style.setProperty('color', 'rgb(67, 160, 71)');
-            } else if (response.difficulty === "Medium") {
-                difficultyEle.style.setProperty('color', 'rgb(239, 108, 0)');
-            } else if (response.difficulty === "Hard") {
-                difficultyEle.style.setProperty('color', 'rgb(233, 30, 99)');
-            }
-            console.log(response.difficulty)
-
-        })
-
-
+    if (difficulty === "Easy") {
+        difficultyEle.style.setProperty('color', 'rgb(67, 160, 71)');
+    } else if (difficulty === "Medium") {
+        difficultyEle.style.setProperty('color', 'rgb(239, 108, 0)');
+    } else if (difficulty === "Hard") {
+        difficultyEle.style.setProperty('color', 'rgb(233, 30, 99)');
+    }
 }
 
-function getProbInfo(){
-    chrome.storage.local.get(["isLoading"], (res) => {
-        if (res && !res.isLoading) {
-            setProbInfo();
-        }else if(res && res.isLoading){
+
+
+chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    document.getElementsByClassName('loaded-container')[0].style.display = 'none';
+
+    chrome.tabs.sendMessage(tabs[0].id, "getCurrTabInfo", function (response) {
+        if (response.isLoading) {
             setTimeout(() => {
-                getProbInfo();
-            }, 2000);
-    
-        }
-    
-    })
-}
+                chrome.tabs.sendMessage(tabs[0].id, "getCurrTabInfo", function (response) {
+                    setProbInfo(response);
+                    document.getElementsByClassName('loading-container')[0].style.display = 'none';
+                    document.getElementsByClassName('loaded-container')[0].style.display = 'block';
 
-getProbInfo();
+                });
+
+            }, 2000);
+        } else {
+            setProbInfo(response);
+            document.getElementsByClassName('loading-container')[0].style.display = 'none';
+            document.getElementsByClassName('loaded-container')[0].style.display = 'block';
+        }
+
+    });
+
+});
+

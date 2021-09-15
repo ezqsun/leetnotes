@@ -1,4 +1,4 @@
-chrome.storage.local.set({ isLoading: true });
+let problemInfo = {isLoading: true};
 
 function checkElement(e) {
   return e && e.length > 0;
@@ -14,8 +14,8 @@ function getProblemDifficulty() {
   let isHard = document.getElementsByClassName('css-t42afm');
   let isMedium = document.getElementsByClassName('css-dcmtd5');
   let isEasy = document.getElementsByClassName('css-14oi08n');
-  while(!isHard && !isMedium && !isEasy){
-    setTimeout(()=>{
+  while (!isHard && !isMedium && !isEasy) {
+    setTimeout(() => {
       isHard = document.getElementsByClassName('css-t42afm');
       isMedium = document.getElementsByClassName('css-dcmtd5');
       isEasy = document.getElementsByClassName('css-14oi08n');
@@ -33,15 +33,15 @@ function getProblemDifficulty() {
   return "";
 }
 
-function setProblemInfo() {
+function getProblemInfo() {
   setTimeout(() => {
     const title = getProblemName();
     const diff = getProblemDifficulty();
-    console.log(title, diff)
-  
-    chrome.storage.local.set({title: title});
-    chrome.storage.local.set({difficulty: diff});
-    chrome.storage.local.set({isLoading: false});
+    problemInfo = {
+      isLoading: false,
+      title: title,
+      difficulty: diff
+    }
   }, 2000);
 
 }
@@ -63,7 +63,18 @@ function getNotesIfAny() {
   return notes.trim();
 }
 
-setProblemInfo();
+getProblemInfo();
+chrome.runtime.onMessage.addListener(
+  function (request, sender, sendResponse) {
+
+    if (request === "getCurrTabInfo") {
+      sendResponse(problemInfo);
+    }
+  }
+);
+
+
+
 
 
 
