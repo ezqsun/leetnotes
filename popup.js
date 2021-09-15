@@ -19,21 +19,23 @@ function setProbInfo(info) {
 
 
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    document.getElementsByClassName('loaded-container')[0].style.display = 'none';
 
     chrome.tabs.sendMessage(tabs[0].id, "getCurrTabInfo", function (response) {
-        console.log(response);
-        if(response.isLoading){
+        if (response.isLoading) {
             setTimeout(() => {
                 chrome.tabs.sendMessage(tabs[0].id, "getCurrTabInfo", function (response) {
-                    console.log(response);
                     setProbInfo(response);
-            
-            
+                    document.getElementsByClassName('loading-container')[0].style.display = 'none';
+                    document.getElementsByClassName('loaded-container')[0].style.display = 'block';
+
                 });
-                
+
             }, 2000);
-        }else{
+        } else {
             setProbInfo(response);
+            document.getElementsByClassName('loading-container')[0].style.display = 'none';
+            document.getElementsByClassName('loaded-container')[0].style.display = 'block';
         }
 
     });
