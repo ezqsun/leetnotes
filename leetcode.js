@@ -42,6 +42,7 @@ function setProblemInfo() {
     chrome.storage.local.set({title: title});
     chrome.storage.local.set({difficulty: diff});
     chrome.storage.local.set({isLoading: false});
+
   }, 2000);
 
 }

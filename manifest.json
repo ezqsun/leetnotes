@@ -12,5 +12,9 @@
     ],
     "action": {
         "default_popup": "popup.html"
-    }
+    },
+    "content_scripts": [{
+        "matches": ["*://leetcode.com/problems/*"],
+        "js": ["leetcode.js"]
+      }]
 }
