@@ -14,8 +14,8 @@ function getProblemDifficulty() {
   let isHard = document.getElementsByClassName('css-t42afm');
   let isMedium = document.getElementsByClassName('css-dcmtd5');
   let isEasy = document.getElementsByClassName('css-14oi08n');
-  while(!isHard && !isMedium && !isEasy){
-    setTimeout(()=>{
+  while (!isHard && !isMedium && !isEasy) {
+    setTimeout(() => {
       isHard = document.getElementsByClassName('css-t42afm');
       isMedium = document.getElementsByClassName('css-dcmtd5');
       isEasy = document.getElementsByClassName('css-14oi08n');
@@ -37,11 +37,19 @@ function setProblemInfo() {
   setTimeout(() => {
     const title = getProblemName();
     const diff = getProblemDifficulty();
-    console.log(title, diff)
-  
-    chrome.storage.local.set({title: title});
-    chrome.storage.local.set({difficulty: diff});
-    chrome.storage.local.set({isLoading: false});
+    const problemInfo = {
+      title: title,
+      difficulty: diff
+    }
+    console.log(problemInfo);
+
+    // chrome.storage.local.set({});
+    // chrome.storage.local.set({ isLoading: false });
+
+    chrome.runtime.sendMessage(problemInfo, (res)=>{
+      console.log('problemInfo sent');
+    });
+
 
   }, 2000);
 
@@ -65,6 +73,9 @@ function getNotesIfAny() {
 }
 
 setProblemInfo();
+
+
+
 
 
 
