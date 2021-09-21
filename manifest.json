@@ -6,13 +6,18 @@
     "background": {
         "service_worker": "background.js"
     },
+    "action": {
+        "default_popup": "popup.html"
+    },
     "permissions": [
         "storage",
         "activeTab",
         "tabs"
     ],
-    "action": {
-        "default_popup": "popup.html"
+    "icons": {
+        "16": "assets/thumbnail.png",
+        "48": "assets/thumbnail.png",
+        "128": "assets/thumbnail.png"
     },
     "content_scripts": [
         {
@@ -26,6 +31,5 @@
     ],
     "host_permissions": [
         "https://api.notion.com/"
-      ]
-
+    ]
 }

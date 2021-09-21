@@ -7,10 +7,10 @@
     <h1>Leetnotes</h1>
 
     <!-- Authentication mode -->
-    <div id="notion-mode">
+    <div id="notion-mode" hidden>
       <form id="notion-info">
-        <input type="text" id="notion-integration" value="please enter Notion integration token"/> 
-        <input type="text" id="notion-database" value="please enter Notion database ID"/>
+        <input type="text" id="notion-integration" placeholder="please enter Notion integration token"/> 
+        <input type="text" id="notion-database" placeholder="please enter Notion database ID"/>
         <button type="submit">link Notion database</button>
       </form>
     </div>
@@ -108,8 +108,8 @@
           </div>
         </div>
         <div class="notes">
-          <p>notes</p>
-          <input type="text" class="notes-input" />
+          <p>notes are loaded from Leetcode</p>
+
         </div>
         <button id="submit-btn" type="submit" >add to Notion</button>
       </div>

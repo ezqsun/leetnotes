@@ -2,8 +2,8 @@ let probNumber;
 let probTitle;
 let probDifficulty;
 
-
 // display Leetcode problem info
+
 function setProbInfo(info) {
     ({ isLoading, title, difficulty } = info);
     probNumber = parseInt(title.split(".")[0].trim());
@@ -30,7 +30,6 @@ function setProbInfo(info) {
 // get Leetcode problem info
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     document.getElementsByClassName('loaded-container')[0].style.display = 'none';
-
     chrome.tabs.sendMessage(tabs[0].id, "getCurrTabInfo", function (response) {
         if (response.isLoading) {
             setTimeout(() => {
@@ -54,29 +53,26 @@ function saveNotionUserInfo(event) {
     const databaseId = document.getElementById("notion-database").value.trim();
 
     const info = {
-        savedInfo: {
+        savedNotionInfo: {
             token: integration,
             databaseId: databaseId
         }
     };
     event.preventDefault();
 
-    chrome.storage.local.set(info, () => {
-        console.log(`set notion info`);
-        chrome.storage.local.get(function (result) { console.log(result) })
-
-    });
+    chrome.storage.local.set(info);
+    chrome.storage.local.set({isSaved: true});
     document.getElementById("notion-mode").hidden = true;
+    document.getElementById("leetcode-mode").hidden = false;
+
 }
 const notionInfoForm = document.getElementById("notion-info");
 notionInfoForm.addEventListener("submit", saveNotionUserInfo);
 
 function getSavedNotionInfo() {
     return new Promise((resolve) => {
-        chrome.storage.local.get("savedInfo", (res) => {
-            token = res.savedInfo.token;
-            database = res.savedInfo.databaseId;
-            resolve({token, database});
+        chrome.storage.local.get("savedNotionInfo", (res) => {
+            resolve(res.savedNotionInfo);
         })
     })
 }
@@ -85,7 +81,6 @@ function getNotes() {
     return new Promise((resolve) => {
         chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
             chrome.tabs.sendMessage(tabs[0].id, "getNotes", response => {
-                console.log(response);
                 resolve(response);
             })
         })
@@ -97,7 +92,7 @@ async function getRequestBody(databaseId) {
     const confidence = document.getElementById("confidence-dropdown").value;
     const date = document.getElementById("date-input").value;
     let reqBody = await getNotes().then(res => {
-        console.log(res);
+
         const obj = {
             "parent": {
                 "database_id": databaseId
@@ -178,18 +173,15 @@ async function getRequestBody(databaseId) {
 }
 
 async function submitNotes(event) {
-    console.log('notes submitted')
-
     const obj = await getSavedNotionInfo().then(res=>{
         return res;
     });
-    ({token, database} = obj);
-    const reqBody = await getRequestBody(database);
+    ({token, databaseId} = obj);
+    const reqBody = await getRequestBody(databaseId);
 
     chrome.runtime.sendMessage({
         method: "postToNotion",
         token: token,
-        database: database,
         postBody: reqBody
     }, (res) => {
         console.log("succesfully sent postReq to bg", res);
@@ -202,3 +194,8 @@ async function submitNotes(event) {
 const submitBtn = document.getElementById("submit-btn");
 submitBtn.addEventListener("click", submitNotes);
 
+chrome.storage.local.get("isSaved", (res)=>{
+    const isSaved = res.isSaved;
+        document.getElementById("notion-mode").hidden = isSaved;
+        document.getElementById("leetcode-mode").hidden = !isSaved;
+})
