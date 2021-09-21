@@ -14,8 +14,18 @@
     "action": {
         "default_popup": "popup.html"
     },
-    "content_scripts": [{
-        "matches": ["*://leetcode.com/problems/*"],
-        "js": ["leetcode.js"]
-      }]
+    "content_scripts": [
+        {
+            "matches": [
+                "*://leetcode.com/problems/*"
+            ],
+            "js": [
+                "leetcode.js"
+            ]
+        }
+    ],
+    "host_permissions": [
+        "https://api.notion.com/"
+      ]
+
 }

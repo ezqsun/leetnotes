@@ -37,7 +37,7 @@ h1{
   margin-right: 20px;
 }
 
-.date-time{
+#date-time{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -45,7 +45,7 @@ h1{
   height: 20px;
   border: 0;
 }
-.date{
+.date-input{
   border: 0;
 }
 
@@ -54,7 +54,7 @@ h1{
 }
 
 
-.confidence-dropdown{
+#confidence-dropdown{
   border: 0;
   float: right;
   width: 100px;
