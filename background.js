@@ -17,12 +17,12 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
                 return res.json();
             })
             .then(data => {
-                sendResponse(data);
-
+                (data.status === undefined) ? sendResponse({status: "successful", data: data}) : sendResponse({status: "unsuccessful", data: data});
 
             })
             .catch(error => {
                 console.log("Request failed", error);
+                sendResponse({status: "unsuccessful", data: error});
             })
     }
     return true;

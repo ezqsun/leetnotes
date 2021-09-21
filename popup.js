@@ -184,7 +184,14 @@ async function submitNotes(event) {
         token: token,
         postBody: reqBody
     }, (res) => {
-        console.log("succesfully sent postReq to bg", res);
+        const responseDiv = document.getElementById("submit-response-container");
+        const node = document.createElement("p");
+        node.innerText = (res.status === "successful") ? "successfully added to Notion database!" : "error with adding to Notion, please try again!";
+        responseDiv.appendChild(node);
+        responseDiv.hidden = false;
+        document.getElementById("notes-submit-container").hidden = true;
+
+        console.log("succesfully sent postReq to bg", res.data, res.data.status);
     }
 
     );
