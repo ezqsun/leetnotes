@@ -47,14 +47,16 @@ function getProblemInfo() {
 }
 
 function getNotesIfAny() {
-  notes = "";
+  let notes = "";
   notesdiv = document
-    .getElementsByClassName('notewrap__eHkN')[0]
-    .getElementsByClassName('CodeMirror-code')[0];
+    .getElementsByClassName("notewrap__eHkN")[0]
+    .getElementsByClassName("CodeMirror-code")[0];
+    console.log(notesdiv);
   if (notesdiv) {
+    console.log('notesdiv === true');
     for (i = 0; i < notesdiv.childNodes.length; i++) {
-      if (notesdiv.childNodes[i].childNodes.length == 0) continue;
-      text = notesdiv.childNodes[i].childNodes[0].innerText;
+      if (notesdiv.childNodes[i].childNodes.length === 0) continue;
+      let text = notesdiv.childNodes[i].childNodes[0].innerText;
       if (text) {
         notes = `${notes}\n${text.trim()}`;
       }
@@ -66,12 +68,18 @@ function getNotesIfAny() {
 getProblemInfo();
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
+    console.log(request, sender);
 
     if (request === "getCurrTabInfo") {
       sendResponse(problemInfo);
+    }else if(request === "getNotes"){
+      const notes = getNotesIfAny();
+      console.log("get notes request received", notes)
+      sendResponse(notes);
     }
   }
 );
+
 
 
 

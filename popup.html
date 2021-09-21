@@ -5,51 +5,114 @@
   </head>
   <body>
     <h1>Leetnotes</h1>
-    <div class="loading-container">
-      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:#fff;display:block;" width="144px" height="144px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
-        <g transform="translate(20 50)">
-        <circle cx="0" cy="0" r="6" fill="#9a8f97">
-          <animateTransform attributeName="transform" type="scale" begin="-0.4807692307692307s" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1" values="0;1;0" keyTimes="0;0.5;1" dur="1.282051282051282s" repeatCount="indefinite"></animateTransform>
-        </circle>
-        </g><g transform="translate(40 50)">
-        <circle cx="0" cy="0" r="6" fill="#c3baba">
-          <animateTransform attributeName="transform" type="scale" begin="-0.3205128205128205s" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1" values="0;1;0" keyTimes="0;0.5;1" dur="1.282051282051282s" repeatCount="indefinite"></animateTransform>
-        </circle>
-        </g><g transform="translate(60 50)">
-        <circle cx="0" cy="0" r="6" fill="#e9e3e6">
-          <animateTransform attributeName="transform" type="scale" begin="-0.16025641025641024s" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1" values="0;1;0" keyTimes="0;0.5;1" dur="1.282051282051282s" repeatCount="indefinite"></animateTransform>
-        </circle>
-        </g><g transform="translate(80 50)">
-        <circle cx="0" cy="0" r="6" fill="#b2b2b2">
-          <animateTransform attributeName="transform" type="scale" begin="0s" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1" values="0;1;0" keyTimes="0;0.5;1" dur="1.282051282051282s" repeatCount="indefinite"></animateTransform>
-        </circle>
-        </g>
-        </svg>
-      <h2>loading... please wait</h2>
-    </div>
-    <div class="loaded-container">
-      <div class="question-details">
-        <div id="title-info"># Title</div>
-        <div id="difficulty">Difficulty</div>
-      </div>
-      <div class="date-time">
-        <input class="date" type="date" />
-        <div class="confidence">
-          <select class="confidence-dropdown">
-            <option value="understood1">understood</option>
-            <option value="understood2">understood overall gist</option>
-            <option value="understood3">important detail not understood</option>
-            <option value="understood4">overall not understood</option>
-          </select>
-        </div>
-      </div>
-      <div class="notes">
-        <p>notes</p>
-        <input type="text" class="notes-input"/>
-      </div>
-      <input id="submit-btn" type="submit" value="add to notion" />
-    </div>
 
+    <!-- Authentication mode -->
+    <div id="notion-mode" hidden>
+      <form id="notion-info">
+        <input type="text" id="notion-integration" placeholder="please enter Notion integration token"/> 
+        <input type="text" id="notion-database" placeholder="please enter Notion database ID"/>
+        <button type="submit">link Notion database</button>
+      </form>
+    </div>
+    <!-- Leetcode page mode -->
+    <div id="leetcode-mode">
+      <div class="loading-container">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          style="margin: auto; background: #fff; display: block"
+          width="144px"
+          height="144px"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="xMidYMid"
+        >
+          <g transform="translate(20 50)">
+            <circle cx="0" cy="0" r="6" fill="#9a8f97">
+              <animateTransform
+                attributeName="transform"
+                type="scale"
+                begin="-0.4807692307692307s"
+                calcMode="spline"
+                keySplines="0.3 0 0.7 1;0.3 0 0.7 1"
+                values="0;1;0"
+                keyTimes="0;0.5;1"
+                dur="1.282051282051282s"
+                repeatCount="indefinite"
+              ></animateTransform>
+            </circle>
+          </g>
+          <g transform="translate(40 50)">
+            <circle cx="0" cy="0" r="6" fill="#c3baba">
+              <animateTransform
+                attributeName="transform"
+                type="scale"
+                begin="-0.3205128205128205s"
+                calcMode="spline"
+                keySplines="0.3 0 0.7 1;0.3 0 0.7 1"
+                values="0;1;0"
+                keyTimes="0;0.5;1"
+                dur="1.282051282051282s"
+                repeatCount="indefinite"
+              ></animateTransform>
+            </circle>
+          </g>
+          <g transform="translate(60 50)">
+            <circle cx="0" cy="0" r="6" fill="#e9e3e6">
+              <animateTransform
+                attributeName="transform"
+                type="scale"
+                begin="-0.16025641025641024s"
+                calcMode="spline"
+                keySplines="0.3 0 0.7 1;0.3 0 0.7 1"
+                values="0;1;0"
+                keyTimes="0;0.5;1"
+                dur="1.282051282051282s"
+                repeatCount="indefinite"
+              ></animateTransform>
+            </circle>
+          </g>
+          <g transform="translate(80 50)">
+            <circle cx="0" cy="0" r="6" fill="#b2b2b2">
+              <animateTransform
+                attributeName="transform"
+                type="scale"
+                begin="0s"
+                calcMode="spline"
+                keySplines="0.3 0 0.7 1;0.3 0 0.7 1"
+                values="0;1;0"
+                keyTimes="0;0.5;1"
+                dur="1.282051282051282s"
+                repeatCount="indefinite"
+              ></animateTransform>
+            </circle>
+          </g>
+        </svg>
+        <h3>loading... please wait</h3>
+      </div>
+      <div class="loaded-container">
+        <div class="question-details">
+          <div id="title-info"># Title</div>
+          <div id="difficulty">Difficulty</div>
+        </div>
+        <div class="date-time">
+          <input id="date-input" type="date" />
+          <div class="confidence">
+            <select id="confidence-dropdown">
+              <option value="Understood">understood</option>
+              <option value="Understood overall gist">understood overall gist</option>
+              <option value="Missing important detail">
+                important detail not understood
+              </option>
+              <option value="Overall not understood">overall not understood</option>
+            </select>
+          </div>
+        </div>
+        <div class="notes">
+          <p>notes are loaded from Leetcode</p>
+
+        </div>
+        <button id="submit-btn" type="submit" >add to Notion</button>
+      </div>
+    </div>
     <script src="popup.js"></script>
-  </body>
 </html>
