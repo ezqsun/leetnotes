@@ -7,7 +7,17 @@ body{
 
 h1{
   font-size: 20px;
-  padding: 10px;
+  padding: 20px;
+}
+
+p{
+  font-size: 15px;
+  font-weight: 400;
+  color:rgb(61, 61, 61);
+}
+
+#nonleetcode-container{
+  text-align: center;
 }
 
 .loaded-container{
