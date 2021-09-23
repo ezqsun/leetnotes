@@ -14,13 +14,19 @@
         <button type="submit">link Notion database</button>
       </form>
     </div>
+
+    <!-- non-Leetcode page mode-->
+    <div id="nonleetcode-container" hidden>
+      <p>go to <b>Leetcode problem page</b> <br> to add notes</p>
+    </div>
+
     <!-- Leetcode page mode -->
     <div id="leetcode-mode">
       <div class="loading-container">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink"
-          style="margin: auto; background: #fff; display: block"
+          style="margin: auto; background: #fafafa; display: block"
           width="144px"
           height="144px"
           viewBox="0 0 100 100"
@@ -107,11 +113,14 @@
             </select>
           </div>
         </div>
-        <div class="notes">
-          <p>notes are loaded from Leetcode</p>
-
+        <div id="notes-submit-container">
+          <div class="notes">
+            <p>notes are loaded from Leetcode</p>
+          </div>
+          <button id="submit-btn" type="submit" >add to Notion</button>
         </div>
-        <button id="submit-btn" type="submit" >add to Notion</button>
+        <div class id="submit-response-container" hidden>
+        </div>
       </div>
     </div>
     <script src="popup.js"></script>

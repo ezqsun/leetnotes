@@ -30,19 +30,26 @@ function setProbInfo(info) {
 // get Leetcode problem info
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     document.getElementsByClassName('loaded-container')[0].style.display = 'none';
-    chrome.tabs.sendMessage(tabs[0].id, "getCurrTabInfo", function (response) {
-        if (response.isLoading) {
-            setTimeout(() => {
-                chrome.tabs.sendMessage(tabs[0].id, "getCurrTabInfo", function (response) {
-                    setProbInfo(response);
-                });
+    let url = tabs[0].url;
+    if (!url.includes("leetcode.com/problems")) {
+        document.getElementById("nonleetcode-container").hidden = false;
+        document.getElementById("leetcode-mode").style.display = "none";
+    } else {
+        chrome.tabs.sendMessage(tabs[0].id, "getCurrTabInfo", function (response) {
+            if (response.isLoading) {
+                setTimeout(() => {
+                    chrome.tabs.sendMessage(tabs[0].id, "getCurrTabInfo", function (response) {
+                        setProbInfo(response);
+                    });
 
-            }, 2000);
-        } else {
-            setProbInfo(response);
-        }
+                }, 2000);
+            } else {
+                setProbInfo(response);
+            }
 
-    });
+        });
+    }
+
 
 });
 
@@ -61,7 +68,7 @@ function saveNotionUserInfo(event) {
     event.preventDefault();
 
     chrome.storage.local.set(info);
-    chrome.storage.local.set({isSaved: true});
+    chrome.storage.local.set({ isSaved: true });
     document.getElementById("notion-mode").hidden = true;
     document.getElementById("leetcode-mode").hidden = false;
 
@@ -173,10 +180,10 @@ async function getRequestBody(databaseId) {
 }
 
 async function submitNotes(event) {
-    const obj = await getSavedNotionInfo().then(res=>{
+    const obj = await getSavedNotionInfo().then(res => {
         return res;
     });
-    ({token, databaseId} = obj);
+    ({ token, databaseId } = obj);
     const reqBody = await getRequestBody(databaseId);
 
     chrome.runtime.sendMessage({
@@ -184,7 +191,14 @@ async function submitNotes(event) {
         token: token,
         postBody: reqBody
     }, (res) => {
-        console.log("succesfully sent postReq to bg", res);
+        const responseDiv = document.getElementById("submit-response-container");
+        const node = document.createElement("p");
+        node.innerText = (res.status === "successful") ? "successfully added to Notion database!" : "error with adding to Notion, please try again!";
+        responseDiv.appendChild(node);
+        responseDiv.hidden = false;
+        document.getElementById("notes-submit-container").hidden = true;
+
+        console.log("succesfully sent postReq to bg", res.data, res.data.status);
     }
 
     );
@@ -194,8 +208,8 @@ async function submitNotes(event) {
 const submitBtn = document.getElementById("submit-btn");
 submitBtn.addEventListener("click", submitNotes);
 
-chrome.storage.local.get("isSaved", (res)=>{
+chrome.storage.local.get("isSaved", (res) => {
     const isSaved = res.isSaved;
-        document.getElementById("notion-mode").hidden = isSaved;
-        document.getElementById("leetcode-mode").hidden = !isSaved;
+    document.getElementById("notion-mode").hidden = isSaved;
+    document.getElementById("leetcode-mode").hidden = !isSaved;
 })
