@@ -4,8 +4,7 @@
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <h1>Leetnotes</h1>
-
+    <h1>Leet<span style="color: rgb(255,161,22)">Notes</span></h1>
     <!-- Authentication mode -->
     <div id="notion-mode" hidden>
       <form id="notion-info">
@@ -17,82 +16,13 @@
 
     <!-- non-Leetcode page mode-->
     <div id="nonleetcode-container" hidden>
-      <p>go to <b>Leetcode problem page</b> <br> to add notes</p>
+      <p>go to <b>LeetCode problem page</b> <br> to add notes</p>
     </div>
 
     <!-- Leetcode page mode -->
     <div id="leetcode-mode">
       <div class="loading-container">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          style="margin: auto; background: #fafafa; display: block"
-          width="144px"
-          height="144px"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="xMidYMid"
-        >
-          <g transform="translate(20 50)">
-            <circle cx="0" cy="0" r="6" fill="#9a8f97">
-              <animateTransform
-                attributeName="transform"
-                type="scale"
-                begin="-0.4807692307692307s"
-                calcMode="spline"
-                keySplines="0.3 0 0.7 1;0.3 0 0.7 1"
-                values="0;1;0"
-                keyTimes="0;0.5;1"
-                dur="1.282051282051282s"
-                repeatCount="indefinite"
-              ></animateTransform>
-            </circle>
-          </g>
-          <g transform="translate(40 50)">
-            <circle cx="0" cy="0" r="6" fill="#c3baba">
-              <animateTransform
-                attributeName="transform"
-                type="scale"
-                begin="-0.3205128205128205s"
-                calcMode="spline"
-                keySplines="0.3 0 0.7 1;0.3 0 0.7 1"
-                values="0;1;0"
-                keyTimes="0;0.5;1"
-                dur="1.282051282051282s"
-                repeatCount="indefinite"
-              ></animateTransform>
-            </circle>
-          </g>
-          <g transform="translate(60 50)">
-            <circle cx="0" cy="0" r="6" fill="#e9e3e6">
-              <animateTransform
-                attributeName="transform"
-                type="scale"
-                begin="-0.16025641025641024s"
-                calcMode="spline"
-                keySplines="0.3 0 0.7 1;0.3 0 0.7 1"
-                values="0;1;0"
-                keyTimes="0;0.5;1"
-                dur="1.282051282051282s"
-                repeatCount="indefinite"
-              ></animateTransform>
-            </circle>
-          </g>
-          <g transform="translate(80 50)">
-            <circle cx="0" cy="0" r="6" fill="#b2b2b2">
-              <animateTransform
-                attributeName="transform"
-                type="scale"
-                begin="0s"
-                calcMode="spline"
-                keySplines="0.3 0 0.7 1;0.3 0 0.7 1"
-                values="0;1;0"
-                keyTimes="0;0.5;1"
-                dur="1.282051282051282s"
-                repeatCount="indefinite"
-              ></animateTransform>
-            </circle>
-          </g>
-        </svg>
+        <img src="assets/loading.svg"/>
         <h3>loading... please wait</h3>
       </div>
       <div class="loaded-container">
@@ -115,11 +45,16 @@
         </div>
         <div id="notes-submit-container">
           <div class="notes">
-            <p>notes are loaded from Leetcode</p>
+            <div class="notes-text">
+              <p>notes are loaded from Leetcode</p>
+            </div>
+            <div class="notes-star-container">
+              <svg fill="rgb(110, 110, 110)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path class="notes-star" d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+            </div>
           </div>
           <button id="submit-btn" type="submit" >add to Notion</button>
         </div>
-        <div class id="submit-response-container" hidden>
+        <div id="submit-response-container" hidden>
         </div>
       </div>
     </div>

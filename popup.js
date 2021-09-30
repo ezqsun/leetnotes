@@ -98,6 +98,8 @@ function getNotes() {
 async function getRequestBody(databaseId) {
     const confidence = document.getElementById("confidence-dropdown").value;
     const date = document.getElementById("date-input").value;
+    const isStarred = document.getElementsByClassName("notes-star")[0].classList.contains("selected")
+    const multiSelectContent = isStarred ? [{"id": "f77c7460-3a27-4d3a-be24-3a2bf5485f29"}] : [] ;
     let reqBody = await getNotes().then(res => {
 
         const obj = {
@@ -134,7 +136,7 @@ async function getRequestBody(databaseId) {
                 "Tags": {
                     "id": "zvmb",
                     "type": "multi_select",
-                    "multi_select": []
+                    "multi_select": multiSelectContent
                 },
                 "Notes": {
                     "id": "~tkb",
@@ -197,7 +199,6 @@ async function submitNotes(event) {
         responseDiv.appendChild(node);
         responseDiv.hidden = false;
         document.getElementById("notes-submit-container").hidden = true;
-
         console.log("succesfully sent postReq to bg", res.data, res.data.status);
     }
 
@@ -213,3 +214,14 @@ chrome.storage.local.get("isSaved", (res) => {
     document.getElementById("notion-mode").hidden = isSaved;
     document.getElementById("leetcode-mode").hidden = !isSaved;
 })
+
+function toggleStar(event) {
+    let isSelected = event.target.classList.toggle("selected");
+    if (isSelected) {
+        event.target.setAttribute("fill", "rgb(255,161,22)");
+    } else {
+        event.target.setAttribute("fill", "rgb(110, 110, 110)");
+    }
+}
+
+document.getElementsByClassName("notes-star")[0].addEventListener("click", toggleStar);
