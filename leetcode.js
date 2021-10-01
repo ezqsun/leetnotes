@@ -68,7 +68,7 @@ chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
 
     if (request === "getCurrTabInfo") {
-      sendResponse(problemInfo);
+        sendResponse(problemInfo);
     }else if(request === "getNotes"){
       const notes = getNotesIfAny();
       sendResponse(notes);

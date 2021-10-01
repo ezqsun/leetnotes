@@ -33,26 +33,30 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     let url = tabs[0].url;
 
     //not on leetcode problem page (does not support daily challenge page)
-    if (!url.includes("leetcode.com/problems/")) {
+    if (!url.includes("leetcode.com/problems/") || url.includes("/discuss/") || url.includes("/submissions/") || url.includes("/solution/")) {
         document.getElementById("nonleetcode-container").hidden = false;
         document.body.style.height = "200px";
         document.getElementById("leetcode-mode").style.display = "none";
     } else {
         chrome.tabs.sendMessage(tabs[0].id, "getCurrTabInfo", function (response) {
-            if (response.isLoading) {
-                setTimeout(() => {
+            if (response === undefined || response.isLoading) {
+                let count = 0;
+                let interval = setInterval(() => {
+                    if (count > 10) {
+                        clearInterval(interval);
+                    }
                     chrome.tabs.sendMessage(tabs[0].id, "getCurrTabInfo", function (response) {
                         setProbInfo(response);
+                        clearInterval(interval);
                     });
-
-                }, 2000);
+                    count++;
+                }, 700)
             } else {
                 setProbInfo(response);
             }
 
         });
     }
-
 
 });
 
@@ -186,16 +190,16 @@ async function getRequestBody(databaseId) {
 
 
 async function submitNotes(event) {
-    if(document.getElementById("date-input").value === ""){
+    if (document.getElementById("date-input").value === "") {
         document.getElementById("modal-container").style.display = "block";
         document.getElementsByClassName("modal-button")[0].addEventListener("click", closeModal);
-    }else{
+    } else {
         const obj = await getSavedNotionInfo().then(res => {
             return res;
         });
         ({ token, databaseId } = obj);
         const reqBody = await getRequestBody(databaseId);
-    
+
         chrome.runtime.sendMessage({
             method: "postToNotion",
             token: token,
@@ -211,7 +215,7 @@ async function submitNotes(event) {
             console.log("succesfully sent postReq to bg", res.data, res.data.status);
             document.getElementById("confetti").hidden = false;
         }
-    
+
         );
         event.preventDefault();
 
@@ -219,7 +223,7 @@ async function submitNotes(event) {
 
 }
 
-function closeModal(event){
+function closeModal(event) {
     event.preventDefault();
     document.getElementById("modal-container").style.display = "none";
 }
