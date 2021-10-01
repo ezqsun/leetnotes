@@ -4,6 +4,9 @@
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
+    <div id="confetti" hidden>
+      <img src="assets/confetti.svg"/>
+    </div>
     <h1>Leet<span style="color: rgb(255,161,22)">Notes</span></h1>
     <!-- Authentication mode -->
     <div id="notion-mode" hidden>
@@ -49,13 +52,22 @@
               <p>notes are loaded from Leetcode</p>
             </div>
             <div class="notes-star-container">
-              <svg fill="rgb(110, 110, 110)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path class="notes-star" d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+              <svg class="notes-star" fill="rgb(110, 110, 110)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path class="notes-star" d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/>
+              </svg>
+              <span class="tooltiptext">star this question</span>
+              <span class="tooltiptext" hidden>unstar this question</span>
             </div>
           </div>
           <button id="submit-btn" type="submit" >add to Notion</button>
         </div>
         <div id="submit-response-container" hidden>
         </div>
+      </div>
+    </div>
+    <div id="modal-container">
+      <div class="modal">
+        <span>please select a date</span>
+        <button class="modal-button">ok</button>
       </div>
     </div>
     <script src="popup.js"></script>

@@ -31,8 +31,11 @@ function setProbInfo(info) {
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     document.getElementsByClassName('loaded-container')[0].style.display = 'none';
     let url = tabs[0].url;
-    if (!url.includes("leetcode.com/problems")) {
+
+    //not on leetcode problem page (does not support daily challenge page)
+    if (!url.includes("leetcode.com/problems/")) {
         document.getElementById("nonleetcode-container").hidden = false;
+        document.body.style.height = "200px";
         document.getElementById("leetcode-mode").style.display = "none";
     } else {
         chrome.tabs.sendMessage(tabs[0].id, "getCurrTabInfo", function (response) {
@@ -99,7 +102,7 @@ async function getRequestBody(databaseId) {
     const confidence = document.getElementById("confidence-dropdown").value;
     const date = document.getElementById("date-input").value;
     const isStarred = document.getElementsByClassName("notes-star")[0].classList.contains("selected")
-    const multiSelectContent = isStarred ? [{"id": "f77c7460-3a27-4d3a-be24-3a2bf5485f29"}] : [] ;
+    const multiSelectContent = isStarred ? [{ "id": "f77c7460-3a27-4d3a-be24-3a2bf5485f29" }] : [];
     let reqBody = await getNotes().then(res => {
 
         const obj = {
@@ -181,31 +184,46 @@ async function getRequestBody(databaseId) {
     return reqBody;
 }
 
-async function submitNotes(event) {
-    const obj = await getSavedNotionInfo().then(res => {
-        return res;
-    });
-    ({ token, databaseId } = obj);
-    const reqBody = await getRequestBody(databaseId);
 
-    chrome.runtime.sendMessage({
-        method: "postToNotion",
-        token: token,
-        postBody: reqBody
-    }, (res) => {
-        const responseDiv = document.getElementById("submit-response-container");
-        const node = document.createElement("p");
-        node.innerText = (res.status === "successful") ? "successfully added to Notion database!" : "error with adding to Notion, please try again!";
-        responseDiv.appendChild(node);
-        responseDiv.hidden = false;
-        document.getElementById("notes-submit-container").hidden = true;
-        console.log("succesfully sent postReq to bg", res.data, res.data.status);
+async function submitNotes(event) {
+    if(document.getElementById("date-input").value === ""){
+        document.getElementById("modal-container").style.display = "block";
+        document.getElementsByClassName("modal-button")[0].addEventListener("click", closeModal);
+    }else{
+        const obj = await getSavedNotionInfo().then(res => {
+            return res;
+        });
+        ({ token, databaseId } = obj);
+        const reqBody = await getRequestBody(databaseId);
+    
+        chrome.runtime.sendMessage({
+            method: "postToNotion",
+            token: token,
+            postBody: reqBody
+        }, (res) => {
+            const responseDiv = document.getElementById("submit-response-container");
+            const node = document.createElement("span");
+            node.setAttribute("id", "submit-response-text");
+            node.innerText = (res.status === "successful") ? "successfully added to Notion database!" : "error with adding to Notion, please try again!";
+            responseDiv.appendChild(node);
+            responseDiv.hidden = false;
+            document.getElementById("notes-submit-container").hidden = true;
+            console.log("succesfully sent postReq to bg", res.data, res.data.status);
+            document.getElementById("confetti").hidden = false;
+        }
+    
+        );
+        event.preventDefault();
+
     }
 
-    );
-    event.preventDefault();
-
 }
+
+function closeModal(event){
+    event.preventDefault();
+    document.getElementById("modal-container").style.display = "none";
+}
+
 const submitBtn = document.getElementById("submit-btn");
 submitBtn.addEventListener("click", submitNotes);
 
@@ -222,6 +240,8 @@ function toggleStar(event) {
     } else {
         event.target.setAttribute("fill", "rgb(110, 110, 110)");
     }
+    document.getElementsByClassName("tooltiptext")[0].hidden = isSelected;
+    document.getElementsByClassName("tooltiptext")[1].hidden = !isSelected;
 }
 
 document.getElementsByClassName("notes-star")[0].addEventListener("click", toggleStar);
