@@ -106,6 +106,7 @@ async function getRequestBody(databaseId) {
     const confidence = document.getElementById("confidence-dropdown").value;
     const date = document.getElementById("date-input").value;
     const isStarred = document.getElementsByClassName("notes-star")[0].classList.contains("selected")
+    console.log("isStarred: ", isStarred)
     const multiSelectContent = isStarred ? [{ "id": "f77c7460-3a27-4d3a-be24-3a2bf5485f29" }] : [];
     let reqBody = await getNotes().then(res => {
 
@@ -238,7 +239,7 @@ chrome.storage.local.get("isSaved", (res) => {
 })
 
 function toggleStar(event) {
-    let isSelected = event.target.classList.toggle("selected");
+    let isSelected = event.currentTarget.classList.toggle("selected");
     if (isSelected) {
         event.target.setAttribute("fill", "rgb(255,161,22)");
     } else {
