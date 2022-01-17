@@ -32,11 +32,23 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     document.getElementsByClassName('loaded-container')[0].style.display = 'none';
     let url = tabs[0].url;
 
-    //not on leetcode problem page (does not support daily challenge page)
+    //not on leetcode problem page 
     if (!url.includes("leetcode.com/problems/") || url.includes("/discuss/") || url.includes("/submissions/") || url.includes("/solution/")) {
-        document.getElementById("nonleetcode-container").hidden = false;
-        document.body.style.height = "200px";
-        document.getElementById("leetcode-mode").style.display = "none";
+        chrome.storage.local.get("isSaved", (res) => {
+            const isSaved = res.isSaved;
+            if (isSaved) {
+                document.body.style.height = "200px";
+                document.getElementById("leetcode-mode").style.display = "none";
+                document.getElementById("nonleetcode-container").hidden = false;
+            } else {
+                document.getElementById("nonleetcode-container").hidden = true;
+            }
+
+        })
+        // document.body.style.height = "200px";
+        // document.getElementById("leetcode-mode").style.display = "none";
+        // document.getElementById("nonleetcode-container").hidden = false;
+
     } else {
         chrome.tabs.sendMessage(tabs[0].id, "getCurrTabInfo", function (response) {
             if (response === undefined || response.isLoading) {
@@ -76,8 +88,9 @@ function saveNotionUserInfo(event) {
 
     chrome.storage.local.set(info);
     chrome.storage.local.set({ isSaved: true });
-    document.getElementById("notion-mode").hidden = true;
-    document.getElementById("leetcode-mode").hidden = false;
+    document.getElementById("notion-mode").style.display = "none";
+    document.getElementById("leetcode-mode").style.display = "flex";
+    console.log(info)
 
 }
 const notionInfoForm = document.getElementById("notion-info");
@@ -106,7 +119,6 @@ async function getRequestBody(databaseId) {
     const confidence = document.getElementById("confidence-dropdown").value;
     const date = document.getElementById("date-input").value;
     const isStarred = document.getElementsByClassName("notes-star")[0].classList.contains("selected")
-    console.log("isStarred: ", isStarred)
     const multiSelectContent = isStarred ? [{ "id": "f77c7460-3a27-4d3a-be24-3a2bf5485f29" }] : [];
     let reqBody = await getNotes().then(res => {
 
@@ -216,10 +228,8 @@ async function submitNotes(event) {
             console.log("succesfully sent postReq to bg", res.data, res.data.status);
             document.getElementById("confetti").hidden = false;
         }
-
         );
         event.preventDefault();
-
     }
 
 }
@@ -234,8 +244,16 @@ submitBtn.addEventListener("click", submitNotes);
 
 chrome.storage.local.get("isSaved", (res) => {
     const isSaved = res.isSaved;
-    document.getElementById("notion-mode").hidden = isSaved;
-    document.getElementById("leetcode-mode").hidden = !isSaved;
+    if (isSaved) {
+        document.getElementById("notion-mode").style.display = "none";
+        document.getElementById("leetcode-mode").style.display = "flex";
+    } else {
+        document.getElementById("notion-mode").style.display = "flex";
+        document.getElementById("leetcode-mode").style.display  = "none";
+    }
+
+
+
 })
 
 function toggleStar(event) {

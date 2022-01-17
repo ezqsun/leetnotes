@@ -4,6 +4,15 @@ const notionVersion = "2021-08-16";
 chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
     ({ method, token, postBody } = req);
     if (req.method === "postToNotion") {
+        console.log({
+            method: 'POST',
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Notion-Version": notionVersion,
+                "Content-Type": "application/json"
+            },
+            body: postBody
+        });
         fetch(`${addPageURL}`, {
             method: 'POST',
             headers: {
