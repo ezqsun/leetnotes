@@ -20,7 +20,7 @@ your template database ID. Find this in your duplicated page link
 https://www.notion.so/{YOUR_WORKSPACE_NAME}/{DATABASE_IDv}?=/{VIEW_ID}
 ```
 
-**Now you can navigate to any Leetcode problem pages, take notes with Leetcode's built-in Notes function, and save the problem details to your dedicated Notion Page using LeetNotes!
+**Now you can navigate to any Leetcode problem pages, take notes with Leetcode's built-in Notes function, and save the problem details to your dedicated Notion Page using LeetNotes!**
 
 ### Developing and Customizing the Extension
 
